@@ -1,6 +1,4 @@
-import torch
 import torch.nn as nn
-import torch.optim as optim
 
 
 class Encoder(nn.Module):
@@ -83,10 +81,11 @@ class Decoder(nn.Module):
 
         # Final convolution to get the right number of features
         #x = self.final_conv(x)
-        x = self.relu(self.fc_2(x))
+
 
         # Reshape back to original format: (batch_size, sequence_length, features)
         x = x.permute(0, 2, 1)
+        x = self.fc_2(x)
 
         return x
 

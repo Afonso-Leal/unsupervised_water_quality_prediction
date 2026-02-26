@@ -21,6 +21,7 @@ class Trainer:
     ):
         self.model = model
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
+        print(self.device)
         self.model.to(self.device)
 
         # Setup datasets
@@ -59,13 +60,15 @@ class Trainer:
 
         pbar = tqdm(self.train_loader, desc='Training')
         for batch_idx, (data, target) in enumerate(pbar):
+            #data = data.double()
+            #target = target.double()
             data, target = data.to(self.device), target.to(self.device)
 
             # Forward pass
-            self.optimizer.zero_grad()
-            output = self.model(data)
-            loss = self.criterion(output, target)
 
+            output = self.model(data.float())
+            loss = self.criterion(output, target.float())
+            self.optimizer.zero_grad()
             # Backward pass
             loss.backward()
             self.optimizer.step()
@@ -92,10 +95,12 @@ class Trainer:
         with torch.no_grad():
             pbar = tqdm(self.val_loader, desc='Validating')
             for data, target in pbar:
+                #data = data.double()
+                #target = target.double()
                 data, target = data.to(self.device), target.to(self.device)
 
                 # Forward pass
-                output = self.model(data)
+                output = self.model(data.float())
                 loss = self.criterion(output, target)
 
                 # Track loss
@@ -110,6 +115,7 @@ class Trainer:
         """Main training loop returning losses for both train and val"""
         train_losses = []
         val_losses = []
+        self.model = self.model.float()
 
         for epoch in range(num_epochs):
             print(f'\nEpoch {epoch + 1}/{num_epochs}')
