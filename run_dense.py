@@ -6,12 +6,6 @@ from trainer import Trainer
 from model_dense import EncoderDecoder, Decoder, Encoder
 from utils import *
 
-n_window = 30
-n_features = 9
-
-kernel_size = 5
-latent_dim = 15
-n_filters = 20
 batch_size = 32
 
 wq_org = WaterQualityDataOrganization(import_data())
@@ -43,7 +37,7 @@ train_losses, val_losse = prob_train.train(num_epochs = 10)
 plt.figure(figsize=(10, 6))
 plt.plot(train_losses, label='Training Loss')
 plt.plot(val_losse, label='Validation Loss')
-plt.title('Training and Validation Loss Over Epochs model 2')
+plt.title('Training and Validation Loss Over Epochs model dense')
 plt.xlabel('Epoch')
 plt.ylabel('Loss (Mean Squared Error)')
 plt.legend()
